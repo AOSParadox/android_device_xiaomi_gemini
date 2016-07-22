@@ -17,34 +17,24 @@
 # inherit CodeAurora MSM8996 Board Config
 -include device/qcom/msm8996/BoardConfig.mk
 
-BOARD_VENDOR := xiaomi
-
 # Boldly go.
 USE_CLANG_PLATFORM_BUILD := true
 
-# Include
+# Include path
 TARGET_SPECIFIC_HEADER_PATH := device/xiaomi/gemini/include
 
-# Assert
+# Assertions
 TARGET_OTA_ASSERT_DEVICE := gemini
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := MSM8996
 TARGET_NO_BOOTLOADER := true
 
-# Kernel
-BOARD_CUSTOM_BOOTIMG_MK := device/xiaomi/gemini/mkbootimg.mk
-ENABLE_CPUSETS := true
-TARGET_CONFIG := msm_defconfig
-KERNEL_DEFCONFIG := kernel/xiaomi/msm8996
-TARGET_PREBUILT_KERNEL := device/xiaomi/gemini/prebuilt/zImage
- 
 # Releasetools
 ADD_RADIO_FILES ?= true
 TARGET_RELEASETOOLS_EXTENSIONS := device/qcom/common
 
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "qualcomm-uart"
+# Architecture
+ENABLE_CPUSETS := true
 
 # Audio
 AUDIO_FEATURE_ENABLED_ACDB_LICENSE := true
@@ -73,49 +63,57 @@ BOARD_HAS_QCA_BT_ROME := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_BTNV := true
 
-# Camera
-USE_DEVICE_SPECIFIC_CAMERA := true
+# Dex-opt
+# Enable dex pre-opt to speed up initial boot
+ifeq ($(HOST_OS),linux)
+      WITH_DEXPREOPT := true
+endif
 
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
+# GPS
+BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
+
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_gemini
+TARGET_RECOVERY_DEVICE_MODULES := libinit_gemini
+
+# Kernel
+BOARD_CUSTOM_BOOTIMG_MK := device/xiaomi/gemini/mkbootimg.mk
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive # Selinux permissive for bringup
+KERNEL_DIR := kernel/xiaomi/msm8996
+KERNEL_DEFCONFIG := msm_defconfig
+TARGET_RECOVERY_FSTAB := device/xiaomi/gemini/ramdisk/fstab.qcom
+TARGET_USE_CM_RAMDISK := true
+TARGET_PREBUILT_KERNEL := device/xiaomi/gemini/prebuilt/zImage
 
 # NFC
 BOARD_NFC_CHIPSET := pn548
 TARGET_USES_NQ_NFC := true
 
 # Partitions
-BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_CACHEIMAGE_PARTITION_SIZE := 402653184
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 58846064640
 
-# QCOM
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# QCOM hardware
 BOARD_USES_QCOM_HARDWARE := false
-
-# Recovery
-TARGET_RECOVERY_FSTAB := device/xiaomi/gemini/ramdisk/fstab.qcom
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += device/xiaomi/gemini/sepolicy
 
-# Vendor init
-TARGET_INIT_VENDOR_LIB := libinit_gemini
-TARGET_RECOVERY_DEVICE_MODULES := libinit_gemini
-
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_HAS_QCOM_WLAN_SDK := true
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_WLAN_DEVICE := qcwcn
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-HOSTAPD_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_P2P := "p2p"
