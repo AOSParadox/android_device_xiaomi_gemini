@@ -27,3 +27,10 @@ PRODUCT_NAME := full_gemini
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := MI 5
 PRODUCT_MANUFACTURER := Xiaomi
+TARGET_VENDOR := Xiaomi
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    TARGET_DEVICE="gemini" \
+    PRODUCT_NAME="gemini" \
+    BUILD_FINGERPRINT="Xiaomi/gemini/gemini:6.0.1/MXB48T/6.7.10:user/release-keys" \
+    PRIVATE_BUILD_DESC="gemini-user 6.0.1 MXB48T 6.7.10 release-keys"
