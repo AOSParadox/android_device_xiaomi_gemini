@@ -47,6 +47,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hwui.text_large_cache_width=2048 \
     ro.hwui.text_large_cache_height=1024
 
+# Bootanimation
+PRODUCT_COPY_FILES += \
+    vendor/aosparadox/bootanimation/1080p_PNG_bootanimation.zip:system/media/bootanimation.zip
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += device/xiaomi/gemini/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/xiaomi/gemini/overlay
